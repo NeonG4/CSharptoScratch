@@ -34,9 +34,10 @@
             labelName = new Label();
             richTextBoxCode = new RichTextBox();
             groupBoxCode = new GroupBox();
-            groupBoxSprites = new GroupBox();
-            buttonSave = new Button();
+            labelCurrentSprite = new Label();
             buttonCancel = new Button();
+            buttonSave = new Button();
+            groupBoxSprites = new GroupBox();
             groupBoxCode.SuspendLayout();
             groupBoxSprites.SuspendLayout();
             SuspendLayout();
@@ -79,7 +80,7 @@
             // 
             // richTextBoxCode
             // 
-            richTextBoxCode.Location = new Point(6, 22);
+            richTextBoxCode.Location = new Point(6, 52);
             richTextBoxCode.Name = "richTextBoxCode";
             richTextBoxCode.Size = new Size(234, 120);
             richTextBoxCode.TabIndex = 5;
@@ -87,15 +88,46 @@
             // 
             // groupBoxCode
             // 
+            groupBoxCode.Controls.Add(labelCurrentSprite);
             groupBoxCode.Controls.Add(buttonCancel);
             groupBoxCode.Controls.Add(buttonSave);
             groupBoxCode.Controls.Add(richTextBoxCode);
-            groupBoxCode.Location = new Point(321, 12);
+            groupBoxCode.Enabled = false;
+            groupBoxCode.Location = new Point(298, 12);
             groupBoxCode.Name = "groupBoxCode";
-            groupBoxCode.Size = new Size(246, 182);
+            groupBoxCode.Size = new Size(246, 208);
             groupBoxCode.TabIndex = 6;
             groupBoxCode.TabStop = false;
             groupBoxCode.Text = "Code";
+            // 
+            // labelCurrentSprite
+            // 
+            labelCurrentSprite.AutoSize = true;
+            labelCurrentSprite.Location = new Point(6, 22);
+            labelCurrentSprite.Name = "labelCurrentSprite";
+            labelCurrentSprite.Size = new Size(12, 15);
+            labelCurrentSprite.TabIndex = 8;
+            labelCurrentSprite.Text = "-";
+            // 
+            // buttonCancel
+            // 
+            buttonCancel.Location = new Point(126, 178);
+            buttonCancel.Name = "buttonCancel";
+            buttonCancel.Size = new Size(114, 23);
+            buttonCancel.TabIndex = 7;
+            buttonCancel.Text = "Cancel";
+            buttonCancel.UseVisualStyleBackColor = true;
+            buttonCancel.Click += buttonCancel_Click;
+            // 
+            // buttonSave
+            // 
+            buttonSave.Location = new Point(6, 178);
+            buttonSave.Name = "buttonSave";
+            buttonSave.Size = new Size(114, 23);
+            buttonSave.TabIndex = 6;
+            buttonSave.Text = "Save";
+            buttonSave.UseVisualStyleBackColor = true;
+            buttonSave.Click += buttonSave_Click;
             // 
             // groupBoxSprites
             // 
@@ -110,24 +142,6 @@
             groupBoxSprites.TabStop = false;
             groupBoxSprites.Text = "Sprites";
             // 
-            // buttonSave
-            // 
-            buttonSave.Location = new Point(6, 148);
-            buttonSave.Name = "buttonSave";
-            buttonSave.Size = new Size(114, 23);
-            buttonSave.TabIndex = 6;
-            buttonSave.Text = "Save";
-            buttonSave.UseVisualStyleBackColor = true;
-            // 
-            // buttonCancel
-            // 
-            buttonCancel.Location = new Point(126, 148);
-            buttonCancel.Name = "buttonCancel";
-            buttonCancel.Size = new Size(114, 23);
-            buttonCancel.TabIndex = 7;
-            buttonCancel.Text = "Cancel";
-            buttonCancel.UseVisualStyleBackColor = true;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -138,6 +152,7 @@
             Name = "Form1";
             Text = "Form1";
             groupBoxCode.ResumeLayout(false);
+            groupBoxCode.PerformLayout();
             groupBoxSprites.ResumeLayout(false);
             groupBoxSprites.PerformLayout();
             ResumeLayout(false);
@@ -155,5 +170,6 @@
         private GroupBox groupBoxSprites;
         private Button buttonCancel;
         private Button buttonSave;
+        private Label labelCurrentSprite;
     }
 }

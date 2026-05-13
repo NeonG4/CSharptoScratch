@@ -3,6 +3,7 @@ namespace CSharptoScratch
     public partial class Form1 : Form
     {
         List<Sprite> sprites = new List<Sprite>();
+        ParsedScratchProject project = new ParsedScratchProject();
         public Form1()
         {
             InitializeComponent();
@@ -36,7 +37,30 @@ namespace CSharptoScratch
 
         private void listBoxSprites_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (listBoxSprites.SelectedIndex == -1)
+            {
+                groupBoxCode.Enabled = false;
+                richTextBoxCode.Clear();
+            }
+            else
+            {
+                groupBoxCode.Enabled = true;
+                labelCurrentSprite.Text = sprites[listBoxSprites.SelectedIndex].name;
+                richTextBoxCode.Text = CSParser.BuildCSharpCode(sprites[listBoxSprites.SelectedIndex].name, project);
+            }
+        }
 
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            CSParser.UpdateParsedProject(project, richTextBoxCode.Text);
+            listBoxSprites.SelectedIndex = -1;
+        }
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            richTextBoxCode.Clear();
+            listBoxSprites.SelectedIndex = -1;
+            labelCurrentSprite.Text = "-";
         }
     }
 }
