@@ -177,6 +177,53 @@ namespace CSharptoScratch
             }
         }
 
+        public static string BuildCSharpCode(string spriteName, ParsedScratchProject project)
+        {
+            if (project == null)
+            {
+                throw new ArgumentNullException(nameof(project));
+            }
+
+            if (string.IsNullOrWhiteSpace(spriteName))
+            {
+                throw new ArgumentException("Sprite name is required", nameof(spriteName));
+            }
+
+            var builder = new StringBuilder();
+            var namespaceName = project.SourceClass?.Namespace;
+
+            if (!string.IsNullOrWhiteSpace(namespaceName))
+            {
+                builder.Append("namespace ").Append(namespaceName).AppendLine();
+                builder.AppendLine("{");
+            }
+
+            var indent = string.IsNullOrWhiteSpace(namespaceName) ? string.Empty : "    ";
+            builder.Append(indent).Append("internal partial class ").Append(spriteName).AppendLine(" : ISpriteClass, IGreenFlagClass");
+            builder.Append(indent).AppendLine("{");
+
+            var methods = project.SourceClass?.Methods ?? new List<ParsedCSharpMethod>();
+            foreach (var method in methods)
+            {
+                builder.Append(indent).Append("    public void ").Append(method.Name).AppendLine("()");
+                builder.Append(indent).AppendLine("    {");
+                foreach (var statement in method.Statements)
+                {
+                    builder.Append(indent).Append("        ").AppendLine(statement.OriginalText);
+                }
+                builder.Append(indent).AppendLine("    }");
+            }
+
+            builder.Append(indent).AppendLine("}");
+
+            if (!string.IsNullOrWhiteSpace(namespaceName))
+            {
+                builder.AppendLine("}");
+            }
+
+            return builder.ToString();
+        }
+
         private IEnumerable<ParsedCSharpMethod> ParseMethods()
         {
             var methods = new List<ParsedCSharpMethod>();
