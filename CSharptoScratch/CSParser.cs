@@ -144,6 +144,39 @@ namespace CSharptoScratch
             return project;
         }
 
+        public static void UpdateParsedProject(ParsedScratchProject project, string code)
+        {
+            if (project == null)
+            {
+                throw new ArgumentNullException(nameof(project));
+            }
+
+            var parser = new CSParser(code);
+            var parsed = parser.Parse();
+
+            project.SourceClass = parsed.SourceClass;
+
+            if (parsed.Sprites.Count == 0)
+            {
+                return;
+            }
+
+            var parsedSprite = parsed.Sprites[0];
+            var existingSprite = project.Sprites.FirstOrDefault(sprite => string.Equals(sprite.Name, parsedSprite.Name, StringComparison.Ordinal));
+
+            if (existingSprite == null)
+            {
+                project.Sprites.Add(parsedSprite);
+                return;
+            }
+
+            existingSprite.Scripts.Clear();
+            foreach (var script in parsedSprite.Scripts)
+            {
+                existingSprite.Scripts.Add(script);
+            }
+        }
+
         private IEnumerable<ParsedCSharpMethod> ParseMethods()
         {
             var methods = new List<ParsedCSharpMethod>();
