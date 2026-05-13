@@ -21,6 +21,7 @@ namespace CSharptoScratch
     internal partial class Sprite : ISpriteClass
     {
         public string name { get; set; }
+        public ParsedScratchProject? ParsedCode { get; set; }
         public Motion motion { get; private set; }
         public Looks looks { get; private set; }
         public Sound sound { get; private set; }
