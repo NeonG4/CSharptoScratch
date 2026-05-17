@@ -3,64 +3,31 @@ namespace CSharptoScratch
     public partial class Form1 : Form
     {
         List<Sprite> sprites = new List<Sprite>();
-        ParsedScratchProject project = new ParsedScratchProject();
         public Form1()
         {
-            InitializeComponent();
-            Sprite stage = new Sprite();
-            stage.name = "stage";
-            sprites.Add(stage);
-            listBoxSprites.Items.Add("stage");
+            InitializeComponent(); ;
         }
 
-        private void buttonAddSprite_Click(object sender, EventArgs e)
+        private void buttonRun_Click(object sender, EventArgs e)
         {
-            string text = textBoxName.Text;
-            bool isDuplicate = false;
-            if (!text.Equals(""))
+            timerTick.Enabled = true;
+
+            Sprite sprite = new Sprite();
+            sprite.Initialize(0, 0, 90, new Bitmap("images\\Dinosaur.png"), "Dinosaur", "Sprite1");
+            groupBoxStage.Controls.Add(sprite.looks.picture);
+            sprite.motion.PointInDirection(new ScratchValue(Random.Shared.Next(360)));
+            sprite.looks.SetSize(new ScratchValue(10));
+            sprites.Add(sprite);
+        }
+        private void timerTick_Tick(object sender, EventArgs e)
+        {
+            foreach (Sprite sprite in sprites)
             {
-                for (int i = 0; i < sprites.Count; i++)
-                {
-                    if (text == sprites[i].name) isDuplicate = true;
-                }
+                sprite.motion.Tick(33.33f);
+                sprite.looks.SetLocation(new Point((int)(sprite.motion.xposition.valfloat + groupBoxStage.Location.X), (int)(sprite.motion.yposition.valfloat + groupBoxStage.Location.Y)));
 
-                if (!isDuplicate)
-                {
-                    Sprite sprite = new Sprite();
-                    sprite.name = text;
-                    sprites.Add(sprite);
-                    listBoxSprites.Items.Add(sprite.name);
-                    textBoxName.Clear();
-                }
+                sprite.motion.Move(new ScratchValue(1));
             }
-        }
-
-        private void listBoxSprites_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (listBoxSprites.SelectedIndex == -1)
-            {
-                groupBoxCode.Enabled = false;
-                richTextBoxCode.Clear();
-            }
-            else
-            {
-                groupBoxCode.Enabled = true;
-                labelCurrentSprite.Text = sprites[listBoxSprites.SelectedIndex].name;
-                richTextBoxCode.Text = CSParser.BuildCSharpCode(sprites[listBoxSprites.SelectedIndex].name, project);
-            }
-        }
-
-        private void buttonSave_Click(object sender, EventArgs e)
-        {
-            CSParser.UpdateParsedProject(project, richTextBoxCode.Text);
-            listBoxSprites.SelectedIndex = -1;
-        }
-
-        private void buttonCancel_Click(object sender, EventArgs e)
-        {
-            richTextBoxCode.Clear();
-            listBoxSprites.SelectedIndex = -1;
-            labelCurrentSprite.Text = "-";
         }
     }
 }

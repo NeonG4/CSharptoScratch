@@ -12,11 +12,6 @@ namespace CSharptoScratch
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new Form1());
-
-            Sprite sprite = new Sprite();
-            sprite.motion.Move(10);
-
-            sprite.pen.ChangePen(PenProperty.color, 1);
         }
     }
 }

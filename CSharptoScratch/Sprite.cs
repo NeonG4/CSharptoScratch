@@ -21,7 +21,6 @@ namespace CSharptoScratch
     internal partial class Sprite : ISpriteClass
     {
         public string name { get; set; }
-        public ParsedScratchProject? ParsedCode { get; set; }
         public Motion motion { get; private set; }
         public Looks looks { get; private set; }
         public Sound sound { get; private set; }
@@ -34,6 +33,17 @@ namespace CSharptoScratch
             sound = new Sound();
             sensing = new Sensing();
             pen = new Pen();
+        }
+        public void Initialize(float x, float y, float direction, Image costume, string costumeName, string name)
+        {
+            motion.xposition.valfloat = x;
+            motion.yposition.valfloat = y;
+            motion.direction.valfloat = direction;
+            
+            looks.costumes.AddItem(costumeName, costume);
+            looks.Initialize(costumeName, x, y);
+
+            this.name = name;
         }
     }
 }

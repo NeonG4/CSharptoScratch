@@ -8,21 +8,130 @@ namespace CSharptoScratch
 {
     internal class Motion
     {
-        float xpos = 0, ypos = 0, direction = 0;
-        public void Move(float steps) { }
-        public void TurnCCW(float steps) { }
-        public void TurnCW(float steps) { }
-        public void PointInDirection(float direction) { }
-        public void GoTo(float x, float y) { }
-        public void Glide(float time, float x, float y) { }
-        public void Point(float dir) { }
-        public void Point(float x, float y) { }
-        public void Change(Axis axis, float steps) { }
-        public void IfOnEdgeBounce() { }
-        public void SetRotationStyle(RotationStyle style) { }
-        public float GetXPosition() { return xpos; }
-        public float GetYPosition() { return ypos; }
-        public float GetDirection() { return direction; }
+
+        public ScratchValue xposition = new ScratchValue(0);
+        public ScratchValue yposition = new ScratchValue(0);
+        public ScratchValue direction = new ScratchValue(90);
+        ScratchValue glideTime;
+        ScratchValue totalTime;
+        ScratchValue glidePositionXDelta;
+        ScratchValue glidePositionYDelta;
+        bool gliding = false;
+        RotationStyle rotationStyle = RotationStyle.allAround;
+
+        public void Tick(float tps)
+        {
+            if (gliding)
+            {
+                xposition += glidePositionXDelta;
+                yposition += glidePositionYDelta;
+                glideTime += tps;
+                if ((glideTime >= totalTime).valfloat == 1)
+                {
+                    gliding = false;
+                }
+            }
+        }
+        public void Move(ScratchValue steps) 
+        {
+            if (steps.isFloat)
+            {
+                xposition.valfloat += (float)(Math.Cos((direction.valfloat - 90) * Math.PI / 180) * steps.valfloat);
+                yposition.valfloat += (float)(Math.Sin((direction.valfloat - 90)* Math.PI / 180) * steps.valfloat);
+            }
+            else
+            {
+                throw new Exception("NaN... (It's a string)");
+            }
+        }
+        public void TurnCCW(ScratchValue steps) 
+        {
+            if (steps.isFloat)
+            {
+                direction.valfloat += steps.valfloat;
+                direction.valfloat %= 360;
+
+            }
+            else
+            {
+                throw new Exception("NaN... (It's a string)");
+            }
+        }
+        public void TurnCW(ScratchValue steps) 
+        {
+            if (steps.isFloat)
+            {
+                direction.valfloat -= steps.valfloat;
+                direction.valfloat %= 360;
+            }
+            else
+            {
+                throw new Exception("NaN... (It's a string)");
+            }
+        }
+        public void PointInDirection(ScratchValue direction) 
+        {
+            if (direction.isFloat)
+            {
+                this.direction.valfloat = direction.valfloat;
+                this.direction.valfloat %= 360;
+
+            }
+            else
+            {
+                throw new Exception("NaN... (It's a string)");
+            }
+        }
+        public void GoTo(ScratchValue x, ScratchValue y) 
+        {
+            if (x.isFloat && y.isFloat)
+            {
+                xposition.valfloat = x.valfloat;
+                yposition.valfloat = y.valfloat;
+            }
+            else
+            {
+                throw new Exception("NaN... (It's a string)");
+            }
+        }
+        public void Glide(ScratchValue time, ScratchValue x, ScratchValue y) 
+        {
+            if (time.isFloat && x.isFloat && y.isFloat)
+            {
+                totalTime = time;
+                glideTime = new ScratchValue(0);
+                glidePositionXDelta = (x - xposition) / time;
+                glidePositionYDelta = (y - yposition) / time;
+            }
+            else
+            {
+                throw new Exception("NaN... (It's a string)");
+            }
+        }
+        public void Point(ScratchValue dir) 
+        {
+            direction = dir;
+        }
+        public void Change(Axis axis, ScratchValue steps) 
+        { 
+            if (axis == Axis.x)
+            {
+                xposition += steps;
+            }
+            else
+            {
+                yposition += steps;
+            }
+        }
+        public void IfOnEdgeBounce() 
+        {
+            // TODO: Implement
+            // use a sprite bounding box, and check if the bounding box overlaps the edge of the screen. If it does, reflect the direction across the normal of the edge.
+        }
+        public void SetRotationStyle(RotationStyle style) 
+        {
+            rotationStyle = style;
+        }
 
     }
     internal enum RotationStyle
