@@ -187,7 +187,7 @@ namespace CSharptoScratch
         {
             this.costumeName = new ScratchValue(costumeName);
             this.costumeNumber = new ScratchValue(1);
-            picture = new PictureBox();
+            picture = new TransparentPictureBox();
             picture.SizeMode = PictureBoxSizeMode.StretchImage;
             picture.Enabled = true;
             picture.Visible = true;
